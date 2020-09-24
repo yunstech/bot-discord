@@ -31,7 +31,7 @@ client.on("message", (recieveMessage) => {
   //       recieveMessage.content
   //   );
 
-  //   recieveMessage.react("👍");
+  //
 
   if (recieveMessage.content.startsWith("!")) {
     processCommand(recieveMessage);
@@ -52,6 +52,7 @@ function processCommand(recieveMessage) {
     );
   } else if (primaryCommand == "code") {
     setCode(arguments, recieveMessage);
+    recieveMessage.react("👍");
   }
 }
 
