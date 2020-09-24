@@ -34,11 +34,11 @@ client.on("message", (recieveMessage) => {
   //
 
   if (recieveMessage.content.startsWith("!")) {
-    processCommand(recieveMessage);
+    processCommand(recieveMessage, client.user);
   }
 });
 
-function processCommand(recieveMessage) {
+function processCommand(recieveMessage, user) {
   let fullCommand = recieveMessage.content.substr(1);
   let splitCommand = fullCommand.split(" ");
   let primaryCommand = splitCommand[0];
@@ -54,11 +54,8 @@ function processCommand(recieveMessage) {
     setCode(arguments, recieveMessage);
     recieveMessage.react("👍");
   } else if (primaryCommand == "terbuatdariapakamu") {
-    fetchusers = recieveMessage.guild.members.fetch(userid);
-    fetchuser = fetchusers.username;
     recieveMessage.channel.send(
-      "Saya di program oleh yunstech menggunakan bahasa pemrograman javscript, terimakasih telah bertanya " +
-        fetchuser
+      "Saya di program oleh yunstech menggunakan bahasa pemrograman javscript, terimakasih telah bertanya "
     );
     recieveMessage.react("😘");
   } else if (primaryCommand == "terimakasihbot") {
