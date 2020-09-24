@@ -46,14 +46,14 @@ function processCommand(recieveMessage) {
     helpCommand(arguments, recieveMessage);
   } else if (primaryCommand == "siapakamu") {
     recieveMessage.channel.send(
-      "Saya adalah robot yang di program oleh muhammad yunus anshari untuk merespons beberapa perintah, jangan lupa untuk follow pembuat @yunstech"
+      "Saya adalah bot yang di program oleh @Yunstech untuk merespons beberapa perintah, jangan lupa untuk follow pembuat @yunstech"
     );
   }
 }
 
 function helpCommand(arguments, receiveMessage) {
   if (arguments.length == 0) {
-    receiveMessage.channel.send(`!siapa: untuk mengetahui siapa saya,
+    receiveMessage.channel.send(`!siapakamu: untuk mengetahui siapa saya,
     segitu dlu ntar di update
     `);
   } else {
