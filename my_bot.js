@@ -2,6 +2,8 @@ const Discord = require("discord.js");
 const { receiveMessageOnPort } = require("worker_threads");
 const client = new Discord.Client();
 
+let code = "";
+
 client.on("ready", () => {
   console.log("Connected as " + client.user.tag);
 
@@ -48,6 +50,8 @@ function processCommand(recieveMessage) {
     recieveMessage.channel.send(
       "Saya adalah bot yang di program oleh @Yunstech untuk merespons beberapa perintah, jangan lupa untuk follow pembuat @yunstech"
     );
+  } else if (primaryCommand == "code") {
+    setCode(arguments, recieveMessage);
   }
 }
 
@@ -64,8 +68,15 @@ function helpCommand(arguments, receiveMessage) {
 }
 function setCode(arguments, receiveMessage) {
   if (arguments.length == 0) {
-    receiveMessage.channel.send("code room: " + localStorage.getItem("code"));
+    if (code) {
+      receiveMessage.channel.send("code room: " + code);
+    } else {
+      receiveMessage.channel.send(
+        "kode room belum di set, silahkan set dengan !code (Code room)"
+      );
+    }
   } else {
+    code = arguments;
     receiveMessage.channel.send("code telah di set ke: " + arguments);
   }
 }
