@@ -1,7 +1,9 @@
 const Discord = require("discord.js");
-const { receiveMessageOnPort } = require("worker_threads");
 const client = new Discord.Client();
 
+var queue = new Map();
+
+const ytdl = require("ytdl-core");
 let code = "";
 
 client.on("ready", () => {
@@ -24,25 +26,17 @@ client.on("message", (recieveMessage) => {
     return;
   }
 
-  //   recieveMessage.channel.send(
-  //     "Message received: " +
-  //       recieveMessage.author.toString() +
-  //       ": " +
-  //       recieveMessage.content
-  //   );
-
-  //
-
   if (recieveMessage.content.startsWith("!")) {
-    processCommand(recieveMessage, client.user);
+    processCommand(recieveMessage, client);
   }
 });
 
-function processCommand(recieveMessage, user) {
+const processCommand = async (recieveMessage, client) => {
   let fullCommand = recieveMessage.content.substr(1);
   let splitCommand = fullCommand.split(" ");
   let primaryCommand = splitCommand[0];
   let arguments = splitCommand.slice(1);
+  const serverQueue = queue.get(recieveMessage.guild.id);
 
   if (primaryCommand == "help") {
     helpCommand(arguments, recieveMessage);
@@ -61,7 +55,104 @@ function processCommand(recieveMessage, user) {
   } else if (primaryCommand == "terimakasihbot") {
     recieveMessage.channel.send("Senang Bisa Membantu! 😘");
     recieveMessage.react("😘");
+  } else if (primaryCommand == "play") {
+    execute(recieveMessage, serverQueue, arguments);
+  } else if (primaryCommand == "skip") {
+    execute(recieveMessage, serverQueue, arguments);
+  } else if (primaryCommand == "stop") {
+    execute(recieveMessage, serverQueue, arguments);
+  } else {
+    serverQueue.songs.push(song);
+    return recieveMessage.channel.send(
+      `${song.title} telah ditambahkan queue!`
+    );
   }
+};
+
+async function execute(message, serverQueue, arguments) {
+  const voiceChannel = message.member.voice.channel;
+  if (!voiceChannel)
+    return message.channel.send(
+      "kamu harus ada voice channel untuk memutar musik!"
+    );
+  const permissions = voiceChannel.permissionsFor(message.client.user);
+  if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
+    return message.channel.send(
+      "saya harus memiliki izin intuk join dan berbicara di voice channel!"
+    );
+  }
+  console.log(arguments);
+  const songInfo = await ytdl.getInfo(arguments[0]);
+  const song = {
+    title: songInfo.videoDetails.title,
+    url: songInfo.videoDetails.video_url,
+  };
+
+  if (!serverQueue) {
+    const queueContruct = {
+      textChannel: message.channel,
+      voiceChannel: voiceChannel,
+      connection: null,
+      songs: [],
+      volume: 5,
+      playing: true,
+    };
+
+    queue.set(message.guild.id, queueContruct);
+
+    queueContruct.songs.push(song);
+
+    try {
+      var connection = await voiceChannel.join();
+      queueContruct.connection = connection;
+      play(message.guild, queueContruct.songs[0]);
+    } catch (err) {
+      console.log(err);
+      queue.delete(message.guild.id);
+      return message.channel.send(err);
+    }
+  } else {
+    serverQueue.songs.push(song);
+    return message.channel.send(`${song.title} telah ditambahkan queue!`);
+  }
+}
+
+function skip(message, serverQueue) {
+  if (!message.member.voice.channel)
+    return message.channel.send(
+      "kamu harus ada voice channel untuk stop musik!"
+    );
+  if (!serverQueue)
+    return message.channel.send("tidak ada musik yang bisa kamu skip!");
+  serverQueue.connection.dispatcher.end();
+}
+
+function stop(message, serverQueue) {
+  if (!message.member.voice.channel)
+    return message.channel.send(
+      "kamu harus ada voice channel untuk stop musik!"
+    );
+  serverQueue.songs = [];
+  serverQueue.connection.dispatcher.end();
+}
+
+function play(guild, song) {
+  const serverQueue = queue.get(guild.id);
+  if (!song) {
+    serverQueue.voiceChannel.leave();
+    queue.delete(guild.id);
+    return;
+  }
+
+  const dispatcher = serverQueue.connection
+    .play(ytdl(song.url))
+    .on("finish", () => {
+      serverQueue.songs.shift();
+      play(guild, serverQueue.songs[0]);
+    })
+    .on("error", (error) => console.error(error));
+  dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+  serverQueue.textChannel.send(`Mulai memutar : **${song.title}**`);
 }
 
 function helpCommand(arguments, receiveMessage) {
