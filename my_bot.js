@@ -59,6 +59,7 @@ function processCommand(recieveMessage) {
 function helpCommand(arguments, receiveMessage) {
   if (arguments.length == 0) {
     receiveMessage.channel.send(`
+    Perintah" Yang telah tersedia:
     !siapakamu: untuk mengetahui siapa saya,
     !code: untuk mengetahui code room among us,
     segitu dlu ntar di update
