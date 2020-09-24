@@ -56,13 +56,13 @@ function processCommand(recieveMessage) {
   } else if (primaryCommand == "terbuatdariapakamu") {
     fetchusers = recieveMessage.guild.members.fetch(userid);
     fetchuser = fetchusers.username;
-    recieveMessage(
+    recieveMessage.channel.send(
       "Saya di program oleh yunstech menggunakan bahasa pemrograman javscript, terimakasih telah bertanya " +
         fetchuser
     );
     recieveMessage.react("😘");
   } else if (primaryCommand == "terimakasihbot") {
-    recieveMessage.send("Senang Bisa Membantu! 😘");
+    recieveMessage.channel.send("Senang Bisa Membantu! 😘");
     recieveMessage.react("😘");
   }
 }
