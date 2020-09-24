@@ -53,6 +53,17 @@ function processCommand(recieveMessage) {
   } else if (primaryCommand == "code") {
     setCode(arguments, recieveMessage);
     recieveMessage.react("👍");
+  } else if (primaryCommand == "terbuatdariapakamu") {
+    fetchusers = recieveMessage.guild.members.fetch(userid);
+    fetchuser = fetchusers.username;
+    recieveMessage(
+      "Saya di program oleh yunstech menggunakan bahasa pemrograman javscript, terimakasih telah bertanya " +
+        fetchuser
+    );
+    recieveMessage.react("😘");
+  } else if (primaryCommand == "terimakasihbot") {
+    recieveMessage.send("Senang Bisa Membantu! 😘");
+    recieveMessage.react("😘");
   }
 }
 
@@ -62,6 +73,8 @@ function helpCommand(arguments, receiveMessage) {
     Perintah" Yang telah tersedia:
     !siapakamu: untuk mengetahui siapa saya,
     !code: untuk mengetahui code room among us,
+    !terbuatdariapakamu: untuk mengetahui saya dibuat menggunakan apa,
+    !terimakasihbot: untuk berterimakasih,
     segitu dlu ntar di update
     `);
   } else {
