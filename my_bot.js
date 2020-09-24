@@ -163,6 +163,9 @@ function helpCommand(arguments, receiveMessage) {
     !code: untuk mengetahui code room among us,
     !terbuatdariapakamu: untuk mengetahui saya dibuat menggunakan apa,
     !terimakasihbot: untuk berterimakasih,
+    !play (link music youtube): memutar music dari youtube,
+    !skip: skip music,
+    !stop: stop music,
     segitu dlu ntar di update
     `);
   } else {
