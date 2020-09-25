@@ -189,4 +189,4 @@ function setCode(arguments, receiveMessage) {
   }
 }
 
-client.login("NzU4NTYyOTkxNjYxNzc2ODk2.X2ww1g.bPWy00cWD4L0EAIyq2WnJDAGb34");
+client.login(TOKEN);
