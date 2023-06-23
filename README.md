@@ -6,7 +6,7 @@
 Hi there, I'm <a href="https://yunstech.netlify.app/" target="_blank" rel="noreferrer">Yunstech</a> 👋
 </h3>
 
-<h3>This is my first discord bot, I make this to learn how to make a bot, so don't judge me 😁 </h3>
+<h4 align="center">This is my first discord bot, I make this to learn how to make a bot, so don't judge me 😁 </h4>
 
 <h2 align="center">
 I'm a Full-Stack Web Developer 💻, Photographer 📸, and Gamer 🎮!
